@@ -85,8 +85,3 @@ double Point::distance_to(const Point& target) const{
 
   return dist;
 }
-
-
-
-
-

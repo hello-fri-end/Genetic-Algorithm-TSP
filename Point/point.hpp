@@ -47,10 +47,3 @@ class Point
     double z;
 };
 #endif
-
-
-
-
-
-
-
