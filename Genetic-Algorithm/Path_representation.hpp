@@ -9,8 +9,11 @@
 #define PATH_REPRESENTATION_H
 
 #include "../Point/point.hpp"
+#include "Crossover/crossover_base.hpp"
 #include <vector>
+#include <cstdlib>
 
+//class Crossover;
 class PathRepresentation {
 
   public:
@@ -46,8 +49,13 @@ class PathRepresentation {
   private:
     std::vector<int> genome;
     double fitnessScore;
+
 };
 
-PathRepresentation cyclic_crossover(const PathRepresentation& A, const PathRepresentation& B);
-PathRepresentation random_crossover(const PathRepresentation& A, const PathRepresentation& B);
+PathRepresentation run_genetic_algorithm( const std::vector<Point>&points,
+                                          Crossover* CrossoverObject,
+                                          size_t populationSize, size_t numGenerations,
+                                          size_t keepPopulation, size_t numMutations);
+
+bool compare_paths(const PathRepresentation& A, const PathRepresentation &B);
 #endif

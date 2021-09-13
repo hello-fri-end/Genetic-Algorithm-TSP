@@ -1,11 +1,10 @@
 #include "Path_representation.hpp"
 #include <iostream>
 #include <algorithm>
-#include <set>
 #include <cstdlib>
+#include <vector>
 
 using std::vector;
-using std::set;
 using std::cout;
 using std::endl;
 
@@ -82,40 +81,66 @@ void PathRepresentation::mutate(){
   std::iter_swap(genome.begin() + indexA, genome.begin() + indexB);
 }
 
-PathRepresentation cyclic_crossover(const PathRepresentation& A, const PathRepresentation& B)
+PathRepresentation run_genetic_algorithm(const std::vector<Point> &points,
+                                         Crossover *CrossoverObject,
+                                         size_t populationSize, size_t numGenerations,
+                                         size_t keepPopulation, size_t numMutations)
 {
-/* To be implemented*/
-}
-
-PathRepresentation random_crossover(const PathRepresentation& A, const PathRepresentation& B)
-{
-  vector<int> pathA = A.get_order();
-  vector<int> pathB = B.get_order();
-  vector<int> offspring ;
-  set<int> keepTrack;
-
-  size_t numPoints = pathA.size();
-
-  // Generate a random index in the range[2, . . ., numPoints -2]
-  unsigned randomIndex = (rand() % (numPoints - 3)) + 2;
-
-  for(unsigned i = 0 ; i < randomIndex; ++i)
-  {
-    offspring.push_back(pathA.at(i));
-    keepTrack.insert(pathA.at(i));
+  // Generate an initial population of random genes
+  vector<PathRepresentation> population;
+  size_t numPoints = points.size();
+  
+  for(unsigned i = 0 ; i < populationSize; ++i) {
+    PathRepresentation genome(numPoints);
+    population.push_back(genome);
   }
 
-  //crosslinking
-
-  for(const auto &point: pathB ){
-    bool found = keepTrack.find(point)!= keepTrack.end();
-    if(!found){
-        offspring.push_back(point);
+  for(unsigned gen = 0; gen < numGenerations * 10; ++gen) {
+    
+    // Compute fitness score of each genome.
+    for(PathRepresentation& genome:population){
+      genome.fitness_score(points);
     }
-  }
 
-  PathRepresentation Offspring(offspring);
-  return Offspring;
+    // sort the genomes by fitness.
+    std::sort(population.begin(), population.end(), compare_paths);
+
+    // Keep the top N fittest memebrs of the population &
+    // replace the remaining memebrs with new genomes produced
+    // by crosslinking.
+
+    for(unsigned i = keepPopulation; i < populationSize; ++i){
+      unsigned indexA;
+      unsigned indexB;
+
+      // range [0 . . . keepPopulation - 1]
+      indexA = rand() % keepPopulation;
+      do {
+        indexB = rand() % keepPopulation;
+          } while( indexA == indexB);
+      population[i] = CrossoverObject->crosslink(population[indexA], population[indexB]); 
+    }
+
+    //Mutate random genes
+    for(unsigned i = 0; i < numMutations; ++i){
+      unsigned randomIndex;
+      randomIndex = 1 + rand() %( populationSize - 1);
+      population[randomIndex].mutate();
+    }
+
+    if(gen % 10 == 0){
+      cout<<" Generation "<<gen/10<<" : shortest path found "
+        <<population[0].get_fitness_score()<<endl;
+    }
+    }
+  return population[0];
 }
 
-
+bool compare_paths(const PathRepresentation &A, const PathRepresentation &B){
+  double fitnessA = A.get_fitness_score();
+  double fitnessB = B.get_fitness_score();
+  if(fitnessA < fitnessB)
+    return true;
+  else
+    return false;
+}
