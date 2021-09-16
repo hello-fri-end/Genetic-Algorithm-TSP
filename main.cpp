@@ -2,6 +2,8 @@
 #include "Genetic-Algorithm/Path_representation.hpp"
 #include "Genetic-Algorithm/Crossover/crossover_base.hpp"
 #include "Genetic-Algorithm/Crossover/random_crossover.hpp"
+#include "Genetic-Algorithm/Crossover/partially_mapped_crossover.hpp"
+#include "Genetic-Algorithm/Crossover/uniform_partially_mapped_crossover.hpp"
 #include <iostream>
 #include <cstdlib>  	// srand(), atoi()
 #include <ctime> 		// time()
@@ -75,35 +77,46 @@ int main(int argc, char **argv) {
 
 	// Points Input
 
-  cout<<"Enter the number of cities:";
+  //cout<<"Enter the number of cities:";
 	cin >> pointsNumber;
 
 	for(int i = 0; i < pointsNumber; i++) {
-    cout<<"Enter city co-ordinates: ";
+    //cout<<"Enter city co-ordinates: ";
 		cin >> inputX >> inputY >> inputZ ;
 		Point inputPoint {inputX, inputY, inputZ};
 		pointsCluster.push_back(inputPoint);
 		 
 	}
 
-	// Run Genetic Algorithm with random_crossover
-  RandomCrossover crosslink;
-  Crossover *CrossoverObject = &crosslink;
+	// Run Genetic Algorithm with random_crossover & partially_mapped_crossover
+  RandomCrossover random_crosslink;
+  PartiallyMappedCrossover pmc_crosslink;
+  UniformPartiallyMappedCrossover upmc_crosslink;
+  Crossover* CrossoverObject[3] = {&random_crosslink, &pmc_crosslink, &upmc_crosslink};
+  
 
-  cout<<"hihih"<<endl;
-	PathRepresentation bestGenome = run_genetic_algorithm(pointsCluster, CrossoverObject,
-                                               populationSize,numGenerations,
-					                                     keepPopulation, numMutations);
-  cout<<"isd"<<endl;
-	vector<int> shortestPathFound = bestGenome.get_order();
-	double pathLength = bestGenome.get_fitness_score();
+  for(unsigned i = 0 ; i < 3; ++i)
+  {
+    cout<<endl;
+    if( i == 0)
+      cout<<" Running Genetic Algorithm with Random Crossover"<<endl;
+    else if (i == 1)
+      cout<<" Running Genetic Algorithm with Partially Mapped Crossover"<<endl;
+    else
+      cout<<" Running Genetic Algorithm with Uniform Partially Mapped Crossover"<<endl;
 
-	cout << "Shortest Path Found : [";
-	for(const auto& genome : shortestPathFound) {
-		cout << " " << genome;
-	}
-	cout << "]\nLength is : " << pathLength << endl;
+    PathRepresentation bestGenome = run_genetic_algorithm(pointsCluster, CrossoverObject[i],
+        populationSize,numGenerations,
+        keepPopulation, numMutations);
+    vector<int> shortestPathFound = bestGenome.get_order();
+    double pathLength = bestGenome.get_fitness_score();
 
+    cout << "Shortest Path Found : [";
+    for(const auto& genome : shortestPathFound) {
+      cout << " " << genome;
+    }
+    cout << "]\nLength is : " << pathLength << endl;
+  }
 	return 0;
 }
 

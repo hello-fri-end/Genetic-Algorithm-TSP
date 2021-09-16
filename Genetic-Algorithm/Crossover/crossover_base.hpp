@@ -12,6 +12,8 @@
 // Forward Declaration of PathRepresentation Class.
 class PathRepresentation;
 
+#include <utility>
+
 class Crossover{
   public:
     //! Constructor
@@ -21,7 +23,8 @@ class Crossover{
     ~Crossover() {};
 
     //! Performs crossover of two genomes
-    virtual PathRepresentation crosslink(const PathRepresentation &A, const PathRepresentation & B)  = 0;
+    virtual std::pair<PathRepresentation, PathRepresentation> crosslink
+           (const PathRepresentation &A, const PathRepresentation & B)  = 0;
 };
 
 #endif

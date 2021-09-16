@@ -2,9 +2,11 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <utility>
 #include <vector>
 
 using std::vector;
+using std::pair;
 using std::cout;
 using std::endl;
 
@@ -117,8 +119,15 @@ PathRepresentation run_genetic_algorithm(const std::vector<Point> &points,
       indexA = rand() % keepPopulation;
       do {
         indexB = rand() % keepPopulation;
-          } while( indexA == indexB);
-      population[i] = CrossoverObject->crosslink(population[indexA], population[indexB]); 
+         } while( indexA == indexB);
+
+        pair<PathRepresentation, PathRepresentation>  offsprings= 
+          CrossoverObject->crosslink(population[indexA], population[indexB]); 
+
+      if (compare_paths(offsprings.first, offsprings.second) )
+        population[i] = offsprings.first;
+      else
+        population[i] = offsprings.second;
     }
 
     //Mutate random genes

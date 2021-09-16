@@ -22,7 +22,8 @@ class RandomCrossover : public Crossover {
     ~RandomCrossover() {};
 
     //! Crossover function
-    PathRepresentation crosslink(const PathRepresentation &A, const PathRepresentation &B);
+    std::pair<PathRepresentation, PathRepresentation>
+        crosslink(const PathRepresentation &A, const PathRepresentation &B);
 };
 
 #endif
