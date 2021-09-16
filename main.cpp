@@ -1,5 +1,5 @@
 #include "Point/point.hpp"
-#include "Genetic-Algorithm/Path_representation.hpp"
+#include "Genetic-Algorithm/path_representation.hpp"
 #include "Genetic-Algorithm/Crossover/crossover_base.hpp"
 #include "Genetic-Algorithm/Crossover/random_crossover.hpp"
 #include "Genetic-Algorithm/Crossover/partially_mapped_crossover.hpp"

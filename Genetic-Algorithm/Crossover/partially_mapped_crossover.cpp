@@ -1,5 +1,5 @@
 #include "partially_mapped_crossover.hpp"
-#include "../Path_representation.hpp"
+#include "../path_representation.hpp"
 #include <vector>
 #include <utility>
 #include <cstdlib>
