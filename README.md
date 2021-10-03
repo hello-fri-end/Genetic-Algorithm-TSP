@@ -3,8 +3,10 @@
 This repo is currently under construction :)
 
 Completed Tasks:
-1. Serial code 
-2. Profiling
+1. Naive Implementation
+2. Optmized Implementation
+3. OPENMP parallelization
 
-To Do:
-Parallelization.
+
+To do's
+MPI, CUDA
