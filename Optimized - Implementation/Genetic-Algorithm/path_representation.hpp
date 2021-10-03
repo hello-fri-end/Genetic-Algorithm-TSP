@@ -58,8 +58,4 @@ PathRepresentation run_genetic_algorithm( const std::vector<Point>&points,
                                           size_t keepPopulation, size_t numMutations);
 
 bool compare_paths(const PathRepresentation& A, const PathRepresentation &B);
-
-void insert_sorted(std::vector<PathRepresentation>& population,
-                   const PathRepresentation &offpsring,
-                   size_t end);
 #endif

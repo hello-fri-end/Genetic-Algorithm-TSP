@@ -35,7 +35,7 @@ class PathRepresentation {
     ~PathRepresentation();
 
     //! Fitness Score
-    double fitness_score(const std::vector<Point>& points);
+    double fitness_score(const std::vector<std::vector<double>>& distances);
 
     //! Mutate the gene
     void mutate();

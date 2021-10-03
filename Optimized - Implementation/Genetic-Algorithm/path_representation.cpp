@@ -112,14 +112,10 @@ PathRepresentation run_genetic_algorithm(const std::vector<Point> &points,
       genome.fitness_score(distances);
     }
 
-  // sort the genomes by fitness.
-  std::sort(population.begin(), population.end(), compare_paths);
 
   for(unsigned gen = 0; gen < numGenerations * 10; ++gen) {
     // sort the genomes by fitness.
-    // no longer needed since we'll use insertion sort
-    // to insert offsprings into the population
-    //std::sort(population.begin(), population.end(), compare_paths);
+    std::sort(population.begin(), population.end(), compare_paths);
 
     // Keep the top N fittest memebrs of the population &
     // replace the remaining memebrs with new genomes produced
@@ -144,9 +140,9 @@ PathRepresentation run_genetic_algorithm(const std::vector<Point> &points,
       offsprings.second.fitness_score(distances);
 
       if (compare_paths(offsprings.first, offsprings.second) )
-        insert_sorted(population, offsprings.first, i);
+        population[i] = offsprings.first;
       else
-        insert_sorted(population, offsprings.second, i);
+        population[i] = offsprings.second;
     }
 
     //Mutate random genes
@@ -173,25 +169,3 @@ bool compare_paths(const PathRepresentation &A, const PathRepresentation &B){
     return false;
 }
 
-void insert_sorted(vector<PathRepresentation>& population,
-                   const PathRepresentation& offspring,
-                   size_t end) {
-  double offspringFitness = offspring.get_fitness_score();
-
-  for(int i = 0; i < end; ++i)
-  {
-    if(offspringFitness <= population[i].get_fitness_score())
-    {
-      // offspring should be inserted at position i.
-      // we have to shift the array to make space for it
-      
-      for(int j = end - 1; j >= i ; --j)
-        population[j + 1] = population[j];
-
-      population[i] = offspring;
-      return ;
-    }
-  }
-   if(offspringFitness < population[end].get_fitness_score() )
-     population[end] = offspring;
-}

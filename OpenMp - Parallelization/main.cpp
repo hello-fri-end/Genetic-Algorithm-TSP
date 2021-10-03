@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdlib>  	// srand(), atoi()
 #include <ctime> 		// time()
+
 extern "C"
 {
 #include <getopt.h>
@@ -89,7 +90,6 @@ int main(int argc, char **argv) {
 		cin >> inputX >> inputY >> inputZ ;
 		Point inputPoint {inputX, inputY, inputZ};
 		pointsCluster.push_back(inputPoint);
-		 
 	}
 
 	// Run Genetic Algorithm with random_crossover & partially_mapped_crossover
@@ -99,7 +99,6 @@ int main(int argc, char **argv) {
   Crossover* CrossoverObject[3] = {&random_crosslink, &pmc_crosslink, &upmc_crosslink};
   
 
-  double startTime = omp_get_wtime();
   for(unsigned i = 0 ; i < 3; ++i)
   {
     cout<<endl;
@@ -122,11 +121,6 @@ int main(int argc, char **argv) {
     }
     cout << "]\nLength is : " << pathLength << endl;
   }
-
-  double endTime = omp_get_wtime();
-  cout<<endl;
-  cout<<"Execution Time = "<<endTime - startTime <<endl;
-
 	return 0;
 }
 
