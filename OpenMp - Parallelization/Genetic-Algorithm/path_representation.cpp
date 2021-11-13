@@ -49,6 +49,7 @@ double PathRepresentation::fitness_score(const vector<vector<double>> &distances
 
   fitnessScore = 0;
 
+#pragma omp parellel for default(shared) reduction(+:fitnessScore) 
   for(size_t i = 0, j = 1; i < numPoints -1; ++i, ++j)
     fitnessScore += distances[genome.at(i)][genome.at(j)];
 
